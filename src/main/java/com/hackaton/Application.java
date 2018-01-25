@@ -37,7 +37,7 @@ public class Application {
         DataSource dataSource = dataSourceBuilder.build();
 
         Flyway flyway = new Flyway();
-        flyway.setLocations("db/migrations");
+        flyway.setLocations("db_migrations");
         flyway.setDataSource(dataSource);
         log.debug("Starting database migration...");
         flyway.migrate();
