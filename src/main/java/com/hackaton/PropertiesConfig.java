@@ -9,7 +9,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @Configuration
 @PropertySources({
         @PropertySource("file:${instance.conf}"),
-        @PropertySource("file:${classpath:application.properties}")
+        //@PropertySource("file:${classpath:application.properties}")
 })
 public class PropertiesConfig {
 

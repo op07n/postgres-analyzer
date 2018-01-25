@@ -14,5 +14,5 @@ mvn clean install -DskipTests=true
 ```
 # Note slashes backward for windows, normal for unix
 ```bash
-mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=file:src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties 
+mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties 
 ```
