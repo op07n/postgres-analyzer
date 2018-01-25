@@ -100,6 +100,11 @@
       <type>pom</type>
       <scope>import</scope>
     </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>3.2.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -109,6 +114,9 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <mainClass>com.hackaton.Application</mainClass>
+          <!--jvmArguments>
+            -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
+          </jvmArguments-->
         </configuration>
       </plugin>
       <plugin>
