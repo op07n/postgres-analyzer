@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="debug postgres-dpa-analyzer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.hackaton.Application" />
+    <option name="VM_PARAMETERS" value="-Dinstance.conf=C:\Dell_EMC\Development\DPA\postgres-dpa-analyzer\src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <module name="postgres-dpa-analyzer" />
+    <envs />
+    <method>
+      <option name="Make" enabled="false" />
+    </method>
+  </configuration>
+</component>
