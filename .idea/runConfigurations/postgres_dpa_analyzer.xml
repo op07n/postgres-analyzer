@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="postgres-dpa-analyzer" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.0.33" ALTERNATIVE_JRE_ENABLED="false">
-    <option name="COMMON_VM_ARGUMENTS" value="-Dinstance.conf=C:\Dell_EMC\Development\DPA\postgres-dpa-analyzer\src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties" />
+    <option name="COMMON_VM_ARGUMENTS" value="-Dinstance.conf=C:\Dell_EMC\Development\DPA\postgres-dpa-analyzer\src\main\resources\application.properties -Dlog4j.configuration=file:C:\Dell_EMC\Development\DPA\postgres-dpa-analyzer\conf\log4j.properties" />
     <option name="UPDATING_POLICY" value="restart-server" />
     <deployment>
       <artifact name="postgres-dpa-analyzer:war exploded">
@@ -14,6 +14,7 @@
       <option name="HTTP_PORT" value="8088" />
       <option name="JNDI_PORT" value="1098" />
     </server-settings>
+    <log_file path="$PROJECT_DIR$/log/*.log" checked="true" skipped="true" show_all="true" alias="app_logs" />
     <predefined_log_file id="Tomcat" enabled="true" />
     <predefined_log_file id="Tomcat Catalina" enabled="true" />
     <predefined_log_file id="Tomcat Manager" enabled="false" />
