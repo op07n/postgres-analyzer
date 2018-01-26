@@ -77,7 +77,7 @@ public class SchemaCompareService {
                  preservedColumnNames.add(oldColumn.getColumnName());
              }
         }
-        List<Column> addedColumns = newSchema.getColumns().stream().filter(c -> preservedColumnNames.contains(c)).collect(Collectors.toList());
+        List<Column> addedColumns = newSchema.getColumns().stream().filter(c -> !preservedColumnNames.contains(c.getColumnName())).collect(Collectors.toList());
 
         SchemaUpdateStatus schemaUpdateStatus = SchemaUpdateStatus.UPDATED;
         if (addedColumns.isEmpty() && deletedColumns.isEmpty() && changedTypeColumns.isEmpty()) {
