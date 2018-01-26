@@ -1,18 +1,20 @@
 package com.hackaton.controllers;
 
 import com.hackaton.dao.ColumnDaoService;
-import com.hackaton.dao.SchemaCompareService;
+import com.hackaton.SchemaCompareService;
 import com.hackaton.dao.TableSchema;
 import com.hackaton.data.JSONReader;
 import com.hackaton.data.Tables;
 import com.hackaton.response.AnalysisResponseRoot;
 import com.hackaton.response.OperationStatus;
+import com.hackaton.response.TableSchemaAnalysisResult;
 import io.atlassian.fugue.Either;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,7 +66,17 @@ public class AnalyzerController {
         }
         List<TableSchema> newTableSchemas = result.right().get();
         schemaCompareService.saveSchemas(newAnalysisId, newTableSchemas);
+        Map<String, TableSchema> newTableSchemaMap = newTableSchemas.stream().collect(Collectors.toMap(TableSchema::getTableName, s -> s ));
 
+        List<TableSchemaAnalysisResult> analysisResults = new ArrayList<>();
+
+        for (TableSchema oldTableSchema : oldTableSchemas) {
+            TableSchema newTableSchema = newTableSchemaMap.get(oldTableSchema.getTableName());
+            TableSchemaAnalysisResult schemaAnalysisResult = schemaCompareService.performSchemaAnalysis(oldTableSchema, newTableSchema);
+            analysisResults.add(schemaAnalysisResult);
+        }
+
+        //todo analysis
         return AnalysisResponseRoot.success(newAnalysisId);
     }
 

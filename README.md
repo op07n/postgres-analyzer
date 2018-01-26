@@ -18,11 +18,20 @@ mvn clean install -DskipTests=true
 mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties 
 ```
 
-# Send gather data for analysis request (Saves information about current tables schema)
+# Step 1. Send gather data for analysis request (Saves information about current tables schema)
 ```bash
 $ curl -H "Content-Type: application/json" -X POST -d "[\"messages\",\"tableName2\"]" http://localhost:8088/api/v1/gatherDataForAnalysis
 ```
 # response
 ```
-{"status":"SUCCESS","statusCode":0,"successful":true}
+{"status":"SUCCESS","analysisId":"IpKvs","statusCode":0,"successful":true}
+```
+# Step 2. Do smth with tables: perform upgrade or smth
+# Step 3. Send perform schema analysis request (performs tables schemas diff with data saved on previous step)
+```bash
+$ curl -H "Content-Type: application/json" -X POST  http://localhost:8088/api/v1/analyze?analysisId=IpKvs
+```
+# response
+```
+{"status":"SUCCESS","analysisId":"IpKvs","statusCode":0,"successful":true}
 ```
