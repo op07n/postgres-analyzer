@@ -47,6 +47,7 @@ public class AnalyzerController {
         for(String tableName: tableNames) {
             Optional<TableSchema> tableSchemaOptional = columnDaoService.streamColumns(tableName);
             if (!tableSchemaOptional.isPresent()) {
+                log.error("Failed to fetch schema for table: {}", tableName);
                return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch schema for table: " + tableName);
             }
             log.info("table {} schema: {}", tableName, tableSchemaOptional.get());
