@@ -33,5 +33,29 @@ $ curl -H "Content-Type: application/json" -X POST  http://localhost:8088/api/v1
 ```
 # response
 ```
-{"status":"SUCCESS","analysisId":"oqjVs","statusCode":0,"data":[{"oldVersion":0,"newVersion":1,"schemaUpdateStatus":"NO_CHANGES","columnAdded":[],"columnDeleted":[],"columnTypeChanged":[]}],"successful":true}
+{  
+   "status":"SUCCESS",
+   "analysisId":"HYwpv",
+   "statusCode":0,
+   "data":[  
+      {  
+         "oldVersion":1,
+         "newVersion":2,
+         "schemaUpdateStatus":"UPDATED",
+         "columnAdded":[  
+
+         ],
+         "columnDeleted":[  
+            {  
+               "columnName":"created",
+               "dataType":"timestamp without time zone"
+            }
+         ],
+         "columnTypeChanged":[  
+
+         ]
+      }
+   ],
+   "successful":true
+}
 ```
