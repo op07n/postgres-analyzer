@@ -19,9 +19,9 @@ mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\applic
 
 # Send analyse request
 ```bash
-curl -H "Content-Type: application/json" -X POST -d '["tableName1","tableName2"]' http://localhost:8088/api/v1/analyze
+$ curl -H "Content-Type: application/json" -X POST -d "[\"tableName1\",\"tableName2\"]" http://localhost:8088/api/v1/analyze
 ```
 # response
 ```
- {"status":"PARSE_EXCEPTION","schemaChange":"Can't read json","statusCode":1,"successful":false}
+{"status":"SUCCESS","statusCode":0,"successful":true}
 ```

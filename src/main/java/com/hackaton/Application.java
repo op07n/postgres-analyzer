@@ -9,7 +9,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Primary;
@@ -19,7 +21,7 @@ import javax.sql.DataSource;
 @ComponentScan( basePackages = { "com.hackaton" } )
 @SpringBootApplication
 @EnableAutoConfiguration
-public class Application {
+public class Application extends SpringBootServletInitializer {
 
     @Bean
     @Primary
@@ -49,5 +51,10 @@ public class Application {
     public static void main( String[] args ) {
         System.out.println("******* Postgres analyzer application started *******");
         SpringApplication.run(Application.class, args);
+    }
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(Application.class);
     }
 }

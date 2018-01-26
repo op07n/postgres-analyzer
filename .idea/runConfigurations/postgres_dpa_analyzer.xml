@@ -71,7 +71,6 @@
     <method>
       <option name="Make" enabled="false" />
       <option name="BuildArtifacts" enabled="true">
-        <artifact name="server:war exploded" />
         <artifact name="postgres-dpa-analyzer:war exploded" />
       </option>
     </method>

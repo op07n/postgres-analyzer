@@ -32,7 +32,7 @@ public class TableParserTest {
         String json = MAPPER.writeValueAsString(tables);
         log.info("{}", json);
         JSONReader<Tables> jsonReader = new JSONReader<>(Tables.class);
-        Tables result = jsonReader.readJSON(json);
+        Tables result = jsonReader.readJSON("[\"Table1\",\"Table2\"]");
         Assert.assertNotNull(result);
         Assert.assertEquals("Table1", result.getValues().get(0));
     }
