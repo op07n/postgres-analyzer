@@ -73,11 +73,11 @@ public class AnalyzerController {
         for (TableSchema oldTableSchema : oldTableSchemas) {
             TableSchema newTableSchema = newTableSchemaMap.get(oldTableSchema.getTableName());
             TableSchemaAnalysisResult schemaAnalysisResult = schemaCompareService.performSchemaAnalysis(oldTableSchema, newTableSchema);
+            log.info("Analysis result for table {}: {}", oldTableSchema.getTableName(), schemaAnalysisResult);
             analysisResults.add(schemaAnalysisResult);
         }
 
-        //todo analysis
-        return AnalysisResponseRoot.success(newAnalysisId);
+        return AnalysisResponseRoot.success(newAnalysisId, analysisResults);
     }
 
     private AnalysisResponseRoot gatherTablesSchemas(String body) throws Exception {

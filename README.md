@@ -33,5 +33,5 @@ $ curl -H "Content-Type: application/json" -X POST  http://localhost:8088/api/v1
 ```
 # response
 ```
-{"status":"SUCCESS","analysisId":"IpKvs","statusCode":0,"successful":true}
+{"status":"SUCCESS","analysisId":"oqjVs","statusCode":0,"data":[{"oldVersion":0,"newVersion":1,"schemaUpdateStatus":"NO_CHANGES","columnAdded":[],"columnDeleted":[],"columnTypeChanged":[]}],"successful":true}
 ```

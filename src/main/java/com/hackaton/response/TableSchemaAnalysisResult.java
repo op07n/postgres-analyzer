@@ -1,11 +1,15 @@
 package com.hackaton.response;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hackaton.dao.Column;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class TableSchemaAnalysisResult {
 
     private Integer oldVersion;
@@ -14,10 +18,13 @@ public class TableSchemaAnalysisResult {
 
     private SchemaUpdateStatus schemaUpdateStatus;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Column> columnAdded;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Column> columnDeleted;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Column> columnTypeChanged;
 
     public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, SchemaUpdateStatus schemaUpdateStatus) {
