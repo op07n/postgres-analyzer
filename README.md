@@ -1,4 +1,4 @@
-# PostgreDPATool
+# postgres-dpa-analyzer
 # Create postgres db 'analyzer'
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5432/analyzer
