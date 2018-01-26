@@ -7,16 +7,14 @@ import com.hackaton.data.JSONReader;
 import com.hackaton.data.Tables;
 import com.hackaton.response.AnalysisResponseRoot;
 import com.hackaton.response.OperationStatus;
+import io.atlassian.fugue.Either;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -44,11 +42,49 @@ public class AnalyzerController {
         }
     }
 
-    private AnalysisResponseRoot gatherTablesSchemas(@RequestBody String body) throws Exception {
+    @RequestMapping(value = "/api/v1/analyze", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public AnalysisResponseRoot performAnalysis(@RequestParam(value = "analysisId") String analysisId) {
+        try {
+            return performTableSchemaAnalysis(analysisId);
+        } catch (Exception e) {
+            log.error("Can't perform table schema analysis for data gathered for analysisId {}", analysisId, e);
+            return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, e.getMessage());
+        }
+    }
+
+    private AnalysisResponseRoot performTableSchemaAnalysis(String oldAnalysisId) {
+        log.info("perform table schema analysis for data gathered for analysisId {}.", oldAnalysisId);
+        String newAnalysisId = schemaCompareService.generateRandomID();
+        List<TableSchema> oldTableSchemas = schemaCompareService.getSchemasForAnalysis(oldAnalysisId);
+        List<String> tableNames = oldTableSchemas.stream().map(TableSchema::getTableName).collect(Collectors.toList());
+
+        Either<AnalysisResponseRoot, List<TableSchema>> result = gatherSchema(tableNames);
+        if (result.isLeft()) {
+            return result.left().get();
+        }
+        List<TableSchema> newTableSchemas = result.right().get();
+        schemaCompareService.saveSchemas(newAnalysisId, newTableSchemas);
+
+        return AnalysisResponseRoot.success(newAnalysisId);
+    }
+
+    private AnalysisResponseRoot gatherTablesSchemas(String body) throws Exception {
         Tables tables = jsonReader.readJSON(body);
         List<String> tableNames = tables.getValues();
         log.info("Got request to gather tables {} schemas.", tableNames);
         String analysisId = schemaCompareService.generateRandomID();
+
+        Either<AnalysisResponseRoot, List<TableSchema>> result = gatherSchema(tableNames);
+        if (result.isLeft()) {
+            return result.left().get();
+        }
+        List<TableSchema> tableSchemas = result.right().get();
+        schemaCompareService.saveSchemas(analysisId, tableSchemas);
+
+        return AnalysisResponseRoot.success(analysisId);
+    }
+
+    private Either<AnalysisResponseRoot, List<TableSchema>> gatherSchema(List<String> tableNames) {
         List<TableSchema> tableSchemas = new ArrayList<>(tableNames.size());
 
         for(String tableName: tableNames) {
@@ -56,15 +92,13 @@ public class AnalyzerController {
             Optional<TableSchema> tableSchemaOptional = columnDaoService.streamColumns(tableVersion, tableName);
             if (!tableSchemaOptional.isPresent()) {
                 log.error("Failed to fetch schema for table: {}", tableName);
-               return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch schema for table: " + tableName);
+                return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch schema for table: " + tableName));
             }
             TableSchema schema = tableSchemaOptional.get();
             log.info("table {} schema: {}", tableName, schema);
             tableSchemas.add(schema);
         }
-
-        schemaCompareService.saveSchemas(analysisId, tableSchemas);
-
-        return AnalysisResponseRoot.success();
+        return Either.right(tableSchemas);
     }
+
 }

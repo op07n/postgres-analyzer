@@ -15,7 +15,7 @@ public class AnalysisResponseRoot<T> {
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private final Long analysisId;
+    private final String analysisId;
 
     @Getter
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -32,7 +32,7 @@ public class AnalysisResponseRoot<T> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final T data;
 
-    private AnalysisResponseRoot(OperationStatus status, T data, Long analysisId, List<AnalysisMessage> analysisMessages, String schemaChange) {
+    private AnalysisResponseRoot(OperationStatus status, T data, String analysisId, List<AnalysisMessage> analysisMessages, String schemaChange) {
         this.status = status;
         this.analysisId = analysisId;
         this.statusCode = status.code;
@@ -44,6 +44,11 @@ public class AnalysisResponseRoot<T> {
     public static  AnalysisResponseRoot success() {
         return new  AnalysisResponseRoot<>(OperationStatus.SUCCESS, null, null, null, null);
     }
+
+    public static  AnalysisResponseRoot success(String analysisId) {
+        return new  AnalysisResponseRoot<>(OperationStatus.SUCCESS, null, analysisId, null, null);
+    }
+
 
     public static <T> AnalysisResponseRoot<T> success(T data) {
         return new AnalysisResponseRoot<>(OperationStatus.SUCCESS, data, null,null, null);
