@@ -16,7 +16,7 @@ public class ColumnDaoService {
     private ColumnDao columnDao;
 
     @Transactional(readOnly = true)
-    public Optional<TableSchema> streamColumns(String tableName) {
+    public Optional<TableSchema> streamColumns(int version, String tableName) {
         List<Object[]> result = columnDao.listColumns(tableName);
 
         if (result == null || result.isEmpty()) {
@@ -37,6 +37,6 @@ public class ColumnDaoService {
             return Optional.empty();
         }
 
-        return Optional.of(new TableSchema(tableName, columns));
+        return Optional.of(new TableSchema(version, tableName, columns));
     }
 }

@@ -18,9 +18,9 @@ mvn clean install -DskipTests=true
 mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties 
 ```
 
-# Send analyse request
+# Send gather data for analysis request (Saves information about current tables schema)
 ```bash
-$ curl -H "Content-Type: application/json" -X POST -d "[\"tableName1\",\"tableName2\"]" http://localhost:8088/api/v1/analyze
+$ curl -H "Content-Type: application/json" -X POST -d "[\"messages\",\"tableName2\"]" http://localhost:8088/api/v1/gatherDataForAnalysis
 ```
 # response
 ```
