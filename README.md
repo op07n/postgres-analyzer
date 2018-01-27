@@ -40,24 +40,39 @@ $ curl -H "Content-Type: application/json" -X POST  http://localhost:8088/api/v1
 ```
 {  
    "status":"SUCCESS",
-   "analysisId":"HYwpv",
+   "analysisId":"ZUWFB",
    "statusCode":0,
    "data":[  
       {  
-         "oldVersion":1,
-         "newVersion":2,
+         "oldVersion":0,
+         "newVersion":1,
          "schemaUpdateStatus":"UPDATED",
          "columnAdded":[  
-
+            {  
+               "columnName":"new_column4",
+               "dataType":"integer"
+            }
          ],
          "columnDeleted":[  
             {  
-               "columnName":"created",
-               "dataType":"timestamp without time zone"
+               "columnName":"new_column",
+               "dataType":"integer"
+            },
+            {  
+               "columnName":"new_column2",
+               "dataType":"integer"
+            },
+            {  
+               "columnName":"new_column3",
+               "dataType":"integer"
             }
          ],
          "columnTypeChanged":[  
-
+            {  
+               "columnName":"author",
+               "dataTypeChangedFrom":"character varying",
+               "dataTypeChangedTo":"text"
+            }
          ]
       }
    ],
