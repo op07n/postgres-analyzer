@@ -14,8 +14,13 @@ mvn clean install -DskipTests=true
 -Drun.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 ```
 # Note slashes backward for windows, normal for unix
+# Windows:
 ```bash
-mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties 
+mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\application.properties -Dlog4j.configuration=file:conf\log4j.properties
+```
+# Unix:
+```bash
+mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src/main/resources/application.properties -Dlog4j.configuration=file:conf/log4j.properties
 ```
 
 # Step 1. Send gather data for analysis request (Saves information about current tables schema)
