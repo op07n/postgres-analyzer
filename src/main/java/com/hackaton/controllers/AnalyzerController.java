@@ -38,6 +38,7 @@ public class AnalyzerController {
         this.jsonReader = new JSONReader<>(Tables.class);
     }
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/api/v1/gatherDataForAnalysis", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public AnalysisResponseRoot gatherDataForAnalysis(@RequestBody String body) {
         try {
@@ -48,6 +49,7 @@ public class AnalyzerController {
         }
     }
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/api/v1/analyze", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public AnalysisResponseRoot performAnalysis(@RequestParam(value = "analysisId") String analysisId) {
         try {
