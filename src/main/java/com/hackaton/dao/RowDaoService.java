@@ -38,6 +38,10 @@ public class RowDaoService {
 
             int columnsNum = schema.getColumns().size();
             for(int j = 0; j < columnsNum; j++) {
+                if (r[j] == null) {
+                    values.add(null);
+                    continue;
+                }
                 switch (r[j].getClass().getSimpleName()) {
                     case "BigInteger":
                         BigInteger id = (BigInteger) r[j];
