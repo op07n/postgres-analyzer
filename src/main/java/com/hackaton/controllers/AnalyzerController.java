@@ -108,16 +108,16 @@ public class AnalyzerController {
         for(String tableName: tableNames) {
             int tableVersion = schemaCompareService.getAndIncCurrentTableVersion(tableName);
             Optional<TableSchema> tableSchemaOptional = columnDaoService.streamColumns(tableVersion, tableName);
+            TableSchema schema = tableSchemaOptional.get();
             if (!tableSchemaOptional.isPresent()) {
                 log.error("Failed to fetch schema for table: {}", tableName);
                 return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch schema for table: " + tableName));
             }
-            Optional<TableSchema> tableSchemaOptionalRows = rowDaoService.streamRows(tableName);
+            Optional<TableSchema> tableSchemaOptionalRows = rowDaoService.streamRows(tableName, schema);
             if (!tableSchemaOptionalRows.isPresent()) {
                 log.error("Failed to fetch rows for table: {}", tableName);
                 return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch rows for table: " + tableName));
             }
-            TableSchema schema = tableSchemaOptional.get();
             log.info("table {} schema: {}", tableName, schema);
             log.info("table {} schema rows: {}", tableName, tableSchemaOptionalRows.get());
             tableSchemas.add(schema);

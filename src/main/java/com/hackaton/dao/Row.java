@@ -5,22 +5,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Getter
 @Setter
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class Row {
 
-    private BigInteger id;
+    private List<Object> object;
 
-    public Row(BigInteger id) {
-        this.id = id;
+
+    public Row(List<Object> object) {
+        this.object = object;
     }
 
     @Override
     public String toString() {
         return "Row{" +
-                "id='" + id + '\'' +
+                "value='" + object.toString() + '\'' +
                 '}';
     }
 }
