@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,11 +16,17 @@ import java.math.BigInteger;
 public class RowDaoService {
 
     @Autowired
+    EntityManager entityManager;
+
+    @Autowired
     private RowDao rowDao;
 
     @Transactional(readOnly = true)
     public Optional<TableSchema> streamRows(String tableName) {
-        List<Object[]> result = rowDao.listRows();//tableName);
+        Query query = entityManager.createNativeQuery("SELECT * FROM " + tableName);
+        List<Object[]> result = query.getResultList();
+
+       // List<Object[]> result = rowDao.listRows();//tableName);
 
         if (result == null || result.isEmpty()) {
             return Optional.empty();
