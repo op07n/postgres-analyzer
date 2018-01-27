@@ -1,6 +1,7 @@
 package com.hackaton;
 
 import com.hackaton.dao.Column;
+import com.hackaton.dao.Row;
 import com.hackaton.dao.TableSchema;
 import com.hackaton.response.SchemaUpdateStatus;
 import com.hackaton.response.TableSchemaAnalysisResult;
@@ -64,6 +65,8 @@ public class SchemaCompareService {
         List<Column> deletedColumns = new ArrayList<>();
         List<Column> changedTypeColumns = new ArrayList<>();
         Set<String> preservedColumnNames = new HashSet<>();
+
+        List<Row> changedRows = new ArrayList<>();
 
         Map<String, Column> newColumnMap = newSchema.getColumns().stream().collect(Collectors.toMap(Column::getColumnName, c -> c));
         for (Column oldColumn: oldSchema.getColumns()) {

@@ -2,6 +2,7 @@ package com.hackaton.controllers;
 
 import com.hackaton.dao.ColumnDaoService;
 import com.hackaton.SchemaCompareService;
+import com.hackaton.dao.RowDaoService;
 import com.hackaton.dao.TableSchema;
 import com.hackaton.data.JSONReader;
 import com.hackaton.data.Tables;
@@ -26,6 +27,9 @@ public class AnalyzerController {
 
     @Autowired
     private ColumnDaoService columnDaoService;
+
+    @Autowired
+    private RowDaoService rowDaoService;
 
     @Autowired
     private SchemaCompareService schemaCompareService;
@@ -106,8 +110,14 @@ public class AnalyzerController {
                 log.error("Failed to fetch schema for table: {}", tableName);
                 return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch schema for table: " + tableName));
             }
+            Optional<TableSchema> tableSchemaOptionalRows = rowDaoService.streamRows(tableName);
+            if (!tableSchemaOptionalRows.isPresent()) {
+                log.error("Failed to fetch rows for table: {}", tableName);
+                return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch rows for table: " + tableName));
+            }
             TableSchema schema = tableSchemaOptional.get();
             log.info("table {} schema: {}", tableName, schema);
+            log.info("table {} schema rows: {}", tableName, tableSchemaOptionalRows.get());
             tableSchemas.add(schema);
         }
         return Either.right(tableSchemas);
