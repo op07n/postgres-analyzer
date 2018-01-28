@@ -4,7 +4,7 @@ package com.hackaton.response;
 public enum OperationStatus {
     SUCCESS(0),
     PARSE_EXCEPTION(1),
-    VALIDATION_ERROR(2),
+    DATA_NOT_FOUND(2),
     INTERNAL_ERROR(99);
 
     public final int code;

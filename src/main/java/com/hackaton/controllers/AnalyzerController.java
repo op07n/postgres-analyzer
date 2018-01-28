@@ -64,6 +64,12 @@ public class AnalyzerController {
         log.info("Request to perform table schema analysis for data gathered for analysisId {}.", oldAnalysisId);
         String newAnalysisId = schemaCompareService.generateRandomID();
         List<TableSchema> oldTableSchemas = schemaCompareService.getSchemasForAnalysis(oldAnalysisId);
+
+        if (oldTableSchemas.isEmpty()) {
+            log.error("Failed to fetch schema for analysisId: {}", oldAnalysisId);
+            return AnalysisResponseRoot.error(OperationStatus.DATA_NOT_FOUND, "Failed to fetch data for analysisId: " + oldAnalysisId);
+        }
+
         List<String> tableNames = oldTableSchemas.stream().map(TableSchema::getTableName).collect(Collectors.toList());
 
         Either<AnalysisResponseRoot, List<TableSchema>> result = gatherSchema(tableNames);
