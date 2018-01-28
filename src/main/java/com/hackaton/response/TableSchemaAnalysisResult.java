@@ -2,8 +2,6 @@ package com.hackaton.response;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.hackaton.dao.Column;
-import com.hackaton.dao.ColumnTypeChanged;
 import lombok.Getter;
 
 import java.util.List;
@@ -22,13 +20,7 @@ public class TableSchemaAnalysisResult {
     private SchemaUpdateStatus schemaUpdateStatus;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Column> columnAdded;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<Column> columnDeleted;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private List<ColumnTypeChanged> columnTypeChanged;
+    private List<ColumnSchemaChange> columnChanges;
 
     public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, String tableName, SchemaUpdateStatus schemaUpdateStatus) {
         this.oldVersion = oldVersion;
@@ -37,11 +29,9 @@ public class TableSchemaAnalysisResult {
         this.schemaUpdateStatus = schemaUpdateStatus;
     }
 
-    public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, String tableName, SchemaUpdateStatus schemaUpdateStatus, List<Column> columnAdded, List<Column> columnDeleted, List<ColumnTypeChanged> columnTypeChanged) {
+    public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, String tableName, SchemaUpdateStatus schemaUpdateStatus, List<ColumnSchemaChange> columnChanges) {
         this(oldVersion, newVersion, tableName, schemaUpdateStatus);
-        this.columnAdded = columnAdded;
-        this.columnDeleted = columnDeleted;
-        this.columnTypeChanged = columnTypeChanged;
+        this.columnChanges = columnChanges;
     }
 
     @Override
@@ -49,9 +39,7 @@ public class TableSchemaAnalysisResult {
         return "TableSchemaAnalysisResult{" +
                 "oldVersion=" + oldVersion +
                 ", newVersion=" + newVersion +
-                ", columnAdded=" + columnAdded +
-                ", columnDeleted=" + columnDeleted +
-                ", columnTypeChanged=" + columnTypeChanged +
+                ", columnChanges=" + columnChanges +
                 '}';
     }
 }

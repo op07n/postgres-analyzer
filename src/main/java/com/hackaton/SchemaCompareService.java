@@ -2,8 +2,9 @@
 
     import com.hackaton.dao.Column;
     import com.hackaton.dao.Row;
-    import com.hackaton.dao.ColumnTypeChanged;
     import com.hackaton.dao.TableSchema;
+    import com.hackaton.response.ColumnAction;
+    import com.hackaton.response.ColumnSchemaChange;
     import com.hackaton.response.SchemaUpdateStatus;
     import com.hackaton.response.TableSchemaAnalysisResult;
     import org.apache.commons.text.RandomStringGenerator;
@@ -63,8 +64,7 @@
                 return new TableSchemaAnalysisResult(oldSchema.getVersion(), newSchema.getVersion(), oldSchema.getTableName(), SchemaUpdateStatus.NO_CHANGES);
             }
 
-            List<Column> deletedColumns = new ArrayList<>();
-            List<ColumnTypeChanged> changedTypeColumns = new ArrayList<>();
+            List<ColumnSchemaChange> columnChanges = new ArrayList<>();
             Set<String> preservedColumnNames = new HashSet<>();
 
             List<Row> changedRows = new ArrayList<>();
@@ -73,10 +73,10 @@
             for (Column oldColumn: oldSchema.getColumns()) {
                  Column newColumn = newColumnMap.get(oldColumn.getColumnName());
                  if (newColumn == null) {
-                     deletedColumns.add(oldColumn);
+                     columnChanges.add(new ColumnSchemaChange(oldColumn.getColumnName(), ColumnAction.DELETED, oldColumn.getDataType()));
                  } else {
                      if (!newColumn.getDataType().equalsIgnoreCase(oldColumn.getDataType())) {
-                         changedTypeColumns.add(new ColumnTypeChanged(oldColumn.getColumnName(), oldColumn.getDataType(), newColumn.getDataType()));
+                         columnChanges.add(new ColumnSchemaChange(oldColumn.getColumnName(), ColumnAction.TYPE_CHANGED, oldColumn.getDataType(), newColumn.getDataType()));
                      }
                      preservedColumnNames.add(oldColumn.getColumnName());
                  }
@@ -84,12 +84,12 @@
             List<Column> addedColumns = newSchema.getColumns().stream().filter(c -> !preservedColumnNames.contains(c.getColumnName())).collect(Collectors.toList());
 
             SchemaUpdateStatus schemaUpdateStatus = SchemaUpdateStatus.UPDATED;
-            if (addedColumns.isEmpty() && deletedColumns.isEmpty() && changedTypeColumns.isEmpty()) {
+            if (columnChanges.isEmpty()) {
                 schemaUpdateStatus = SchemaUpdateStatus.NO_CHANGES;
             }
 
             return new TableSchemaAnalysisResult(oldSchema.getVersion(), newSchema.getVersion(),
-                    oldSchema.getTableName(), schemaUpdateStatus, addedColumns, deletedColumns, changedTypeColumns);
+                    oldSchema.getTableName(), schemaUpdateStatus, columnChanges);
         }
 
     }
