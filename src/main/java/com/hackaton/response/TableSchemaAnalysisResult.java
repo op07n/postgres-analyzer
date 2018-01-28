@@ -17,6 +17,8 @@ public class TableSchemaAnalysisResult {
 
     private Integer newVersion;
 
+    private String tableName;
+
     private SchemaUpdateStatus schemaUpdateStatus;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -28,16 +30,15 @@ public class TableSchemaAnalysisResult {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ColumnTypeChanged> columnTypeChanged;
 
-    public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, SchemaUpdateStatus schemaUpdateStatus) {
+    public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, String tableName, SchemaUpdateStatus schemaUpdateStatus) {
         this.oldVersion = oldVersion;
         this.newVersion = newVersion;
+        this.tableName = tableName;
         this.schemaUpdateStatus = schemaUpdateStatus;
     }
 
-    public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, SchemaUpdateStatus schemaUpdateStatus, List<Column> columnAdded, List<Column> columnDeleted, List<ColumnTypeChanged> columnTypeChanged) {
-        this.oldVersion = oldVersion;
-        this.newVersion = newVersion;
-        this.schemaUpdateStatus = schemaUpdateStatus;
+    public TableSchemaAnalysisResult(Integer oldVersion, Integer newVersion, String tableName, SchemaUpdateStatus schemaUpdateStatus, List<Column> columnAdded, List<Column> columnDeleted, List<ColumnTypeChanged> columnTypeChanged) {
+        this(oldVersion, newVersion, tableName, schemaUpdateStatus);
         this.columnAdded = columnAdded;
         this.columnDeleted = columnDeleted;
         this.columnTypeChanged = columnTypeChanged;

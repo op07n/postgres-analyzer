@@ -44,8 +44,8 @@ public class AnalyzerController {
         try {
             return gatherTablesSchemas(body);
         } catch (Exception e) {
-            log.error("Can't parse input messages", e);
-            return AnalysisResponseRoot.error(OperationStatus.PARSE_EXCEPTION, e.getMessage());
+            log.error("Can't process request to gather tables + " + body + " schemas and data. Exception occurred.", e);
+            return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, e.getMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public class AnalyzerController {
     }
 
     private AnalysisResponseRoot performTableSchemaAnalysis(String oldAnalysisId) {
-        log.info("perform table schema analysis for data gathered for analysisId {}.", oldAnalysisId);
+        log.info("Request to perform table schema analysis for data gathered for analysisId {}.", oldAnalysisId);
         String newAnalysisId = schemaCompareService.generateRandomID();
         List<TableSchema> oldTableSchemas = schemaCompareService.getSchemasForAnalysis(oldAnalysisId);
         List<String> tableNames = oldTableSchemas.stream().map(TableSchema::getTableName).collect(Collectors.toList());
@@ -106,18 +106,23 @@ public class AnalyzerController {
         List<TableSchema> tableSchemas = new ArrayList<>(tableNames.size());
 
         for(String tableName: tableNames) {
+
             int tableVersion = schemaCompareService.getAndIncCurrentTableVersion(tableName);
             Optional<TableSchema> tableSchemaOptional = columnDaoService.streamColumns(tableVersion, tableName);
-            TableSchema schema = tableSchemaOptional.get();
+
             if (!tableSchemaOptional.isPresent()) {
                 log.error("Failed to fetch schema for table: {}", tableName);
                 return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch schema for table: " + tableName));
             }
+
+            TableSchema schema = tableSchemaOptional.get();
             Optional<TableSchema> tableSchemaOptionalRows = rowDaoService.streamRows(tableName, schema);
+
             if (!tableSchemaOptionalRows.isPresent()) {
                 log.error("Failed to fetch rows for table: {}", tableName);
                 return Either.left(AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Failed to fetch rows for table: " + tableName));
             }
+
             log.info("table {} schema: {}", tableName, schema);
             log.info("table {} schema rows: {}", tableName, tableSchemaOptionalRows.get());
             tableSchemas.add(schema);
