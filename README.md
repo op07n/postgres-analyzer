@@ -38,44 +38,31 @@ $ curl -H "Content-Type: application/json" -X POST  http://localhost:8088/api/v1
 ```
 # response
 ```
-{  
-   "status":"SUCCESS",
-   "analysisId":"ZUWFB",
-   "statusCode":0,
-   "data":[  
-      {  
-         "oldVersion":0,
-         "newVersion":1,
-         "schemaUpdateStatus":"UPDATED",
-         "columnAdded":[  
-            {  
-               "columnName":"new_column4",
-               "dataType":"integer"
-            }
-         ],
-         "columnDeleted":[  
-            {  
-               "columnName":"new_column",
-               "dataType":"integer"
-            },
-            {  
-               "columnName":"new_column2",
-               "dataType":"integer"
-            },
-            {  
-               "columnName":"new_column3",
-               "dataType":"integer"
-            }
-         ],
-         "columnTypeChanged":[  
-            {  
-               "columnName":"author",
-               "dataTypeChangedFrom":"character varying",
-               "dataTypeChangedTo":"text"
-            }
-         ]
-      }
-   ],
-   "successful":true
+{
+  "status": "SUCCESS",
+  "analysisId": "j1KIj",
+  "statusCode": 0,
+  "data": [
+    {
+      "oldVersion": 0,
+      "newVersion": 1,
+      "tableName": "messages",
+      "schemaUpdateStatus": "UPDATED",
+      "columnChanges": [
+        {
+          "name": "created",
+          "action": "TYPE_CHANGED",
+          "oldType": "text",
+          "newType": "character varying"
+        },
+        {
+          "name": "client_received",
+          "action": "DELETED",
+          "oldType": "text"
+        }
+      ]
+    }
+  ],
+  "successful": true
 }
 ```
