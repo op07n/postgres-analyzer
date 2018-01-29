@@ -70,6 +70,7 @@
             List<Row> changedRows = new ArrayList<>();
 
             Map<String, Column> newColumnMap = newSchema.getColumns().stream().collect(Collectors.toMap(Column::getColumnName, c -> c));
+
             for (Column oldColumn: oldSchema.getColumns()) {
                  Column newColumn = newColumnMap.get(oldColumn.getColumnName());
                  if (newColumn == null) {
@@ -81,7 +82,8 @@
                      preservedColumnNames.add(oldColumn.getColumnName());
                  }
             }
-            List<Column> addedColumns = newSchema.getColumns().stream().filter(c -> !preservedColumnNames.contains(c.getColumnName())).collect(Collectors.toList());
+            newSchema.getColumns().stream().filter(c -> !preservedColumnNames.contains(c.getColumnName()))
+                    .forEach(c -> columnChanges.add(new ColumnSchemaChange(c.getColumnName(), ColumnAction.ADDED, null, c.getDataType())));
 
             SchemaUpdateStatus schemaUpdateStatus = SchemaUpdateStatus.UPDATED;
             if (columnChanges.isEmpty()) {
