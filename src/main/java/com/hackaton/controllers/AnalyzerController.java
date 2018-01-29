@@ -39,6 +39,17 @@ public class AnalyzerController {
     }
 
     @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/api/v1/getTables", method = RequestMethod.GET, produces = "application/json")
+    public AnalysisResponseRoot getTables(@RequestParam(value = "schema") String schema) {
+        try {
+            return getTablesForSchema(schema);
+        } catch (Exception e) {
+            log.error("Can't process request to get table names for schema" + schema + " . Exception occurred.", e);
+            return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, e.getMessage());
+        }
+    }
+
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/api/v1/gatherDataForAnalysis", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public AnalysisResponseRoot gatherDataForAnalysis(@RequestBody String body) {
         try {
@@ -58,6 +69,18 @@ public class AnalyzerController {
             log.error("Can't perform table schema analysis for data gathered for analysisId {}", analysisId, e);
             return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, e.getMessage());
         }
+    }
+
+    private AnalysisResponseRoot getTablesForSchema(String schemaName) {
+        log.info("Request to get table names for schema {}.", schemaName);
+        Optional<List<String>> tableNameOptional = columnDaoService.streamTables(schemaName);
+        if (!tableNameOptional.isPresent()) {
+            log.warn("Failed to table names for schema: {}", schemaName);
+            return AnalysisResponseRoot.error(OperationStatus.DATA_NOT_FOUND, "Failed to table names for schema: " + schemaName);
+        }
+        List<String> tableNames = tableNameOptional.get();
+        log.info("schema {}");
+        return AnalysisResponseRoot.success(null, tableNames);
     }
 
     private AnalysisResponseRoot performTableSchemaAnalysis(String oldAnalysisId) {

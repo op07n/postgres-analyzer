@@ -16,6 +16,28 @@ public class ColumnDaoService {
     private ColumnDao columnDao;
 
     @Transactional(readOnly = true)
+    public Optional<List<String>> streamTables(String schemaName) {
+        List<Object> result = columnDao.listTables(schemaName);
+
+        if (result == null || result.isEmpty()) {
+            return Optional.empty();
+        }
+
+        List<String> tableNames = new ArrayList<>();
+        for (int i = 0; i < result.size(); i++) {
+            Object r = result.get(i);
+            String tableName = (String) r;
+            tableNames.add(tableName);
+        }
+
+        if (tableNames.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(tableNames);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<TableSchema> streamColumns(int version, String tableName) {
         List<Object[]> result = columnDao.listColumns(tableName);
 
