@@ -19,8 +19,16 @@ public class RowDaoService {
     @Autowired
     EntityManager entityManager;
 
-    @Autowired
-    private RowDao rowDao;
+    @Transactional(readOnly = true)
+    public boolean testConnection() {
+        Query query = entityManager.createNativeQuery("select 1;");
+        List<Object> result = query.getResultList();
+        if (result == null || result.isEmpty()) {
+            return false;
+        }
+        Integer value = (Integer) result.get(0);
+        return value == 1;
+    }
 
     @Transactional(readOnly = true)
     public Optional<TableSchema> streamRows(String tableName, TableSchema schema) {
@@ -33,8 +41,8 @@ public class RowDaoService {
 
         List<Row> rows = new ArrayList<>();
         for (int i = 0; i < result.size(); i++) {
-            List<Object> values = new ArrayList<Object>();
-            Object[] r = (Object[]) result.get(i);
+            List<Object> values = new ArrayList<>();
+            Object[] r = result.get(i);
 
             int columnsNum = schema.getColumns().size();
             for(int j = 0; j < columnsNum; j++) {
@@ -65,6 +73,6 @@ public class RowDaoService {
             return Optional.empty();
         }
 
-        return Optional.of(new TableSchema(tableName, rows));
+        return Optional.of(new TableSchema(tableName, schema.getColumns(), rows));
     }
 }

@@ -1,6 +1,8 @@
 package com.hackaton;
 
 
+import com.hackaton.dao.DataSourceWrapper;
+import com.hackaton.data.ConnectionConfig;
 import lombok.extern.slf4j.Slf4j;
 //import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +14,11 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import javax.sql.DataSource;
+import java.util.Optional;
 
 @Slf4j
 @ComponentScan( basePackages = { "com.hackaton" } )
@@ -37,13 +40,6 @@ public class Application extends SpringBootServletInitializer {
         dataSourceBuilder.password(password);
         dataSourceBuilder.driverClassName(driverClass);
         DataSource dataSource = dataSourceBuilder.build();
-
-//        Flyway flyway = new Flyway();
-//        flyway.setLocations("db_migrations");
-//        flyway.setDataSource(dataSource);
-//        log.debug("Starting database migration...");
-//        flyway.migrate();
-//        log.debug("Database migration completed.");
 
         return dataSource;
     }

@@ -2,8 +2,10 @@ package com.hackaton.controllers;
 
 import com.hackaton.dao.ColumnDaoService;
 import com.hackaton.SchemaCompareService;
+import com.hackaton.dao.DataSourceWrapper;
 import com.hackaton.dao.RowDaoService;
 import com.hackaton.dao.TableSchema;
+import com.hackaton.data.ConnectionConfig;
 import com.hackaton.data.JSONReader;
 import com.hackaton.data.Tables;
 import com.hackaton.response.AnalysisResponseRoot;
@@ -34,8 +36,34 @@ public class AnalyzerController {
     @Autowired
     private SchemaCompareService schemaCompareService;
 
+    @Autowired
+    private DataSourceWrapper dataSourceWrapper;
+
+
     public AnalyzerController() {
         this.jsonReader = new JSONReader<>(Tables.class);
+    }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping(value = "/api/v1/connectToDB", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+    public AnalysisResponseRoot connectToDatabase(@RequestBody String body) {
+        try {
+            return connectToDB(body);
+        } catch (Exception e) {
+            log.error("Can't process request to connect to db + " + body + " . Exception occurred.", e);
+            return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, e.getMessage());
+        }
+    }
+
+    public AnalysisResponseRoot connectToDB(String body) throws Exception {
+        log.info("Request to connect to db {}.", body);
+        JSONReader<ConnectionConfig> jsonReader = new JSONReader<>(ConnectionConfig.class);
+        ConnectionConfig connectionConfig = jsonReader.readJSON(body);
+        dataSourceWrapper.updateConnection(connectionConfig);
+        if (rowDaoService.testConnection()) {
+            return AnalysisResponseRoot.success();
+        }
+        return AnalysisResponseRoot.error(OperationStatus.INTERNAL_ERROR, "Can't connect using provided connection config");
     }
 
     @CrossOrigin(origins = "*")

@@ -21,7 +21,7 @@ public class TableSchema {
         this.tableName = tableName;
     }
 
-    public TableSchema(String tableName, List<Row> rows) {
+    public TableSchema(String tableName, List<Column> columns, List<Row> rows) {
         this.rows = rows;
         this.tableName = tableName;
     }
