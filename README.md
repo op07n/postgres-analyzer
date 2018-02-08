@@ -33,6 +33,22 @@ curl -H "Content-Type: application/json" -X GET  http://localhost:8088/api/v1/ge
 {"status":"SUCCESS","statusCode":0,"data":["schema_version","messages"],"successful":true}
 ```
 # How to use Postgres DPA Analyzer
+# Step 0. Set db configuration, and check connection
+```bash
+curl -H "Content-Type: application/json" -X POST -d "{\"dbUrl\":\"jdbc:postgresql://localhost:5432/messages\",\"username\":\"postgres\",\"password\":\"postgres\",\"schemaName\":\"public\"}" http://localhost:8088/api/v1/connectToDB
+```
+# Responses
+```
+{
+  "status": "INTERNAL_ERROR",
+  "error": "Could not get JDBC Connection; nested exception is org.postgresql.util.PSQLException: Connection refused. Check that the hostname and port are correct and that the postmaster is accepting TCP\/IP connections.",
+  "statusCode": 99,
+  "successful": false
+}
+```
+```
+{"status":"SUCCESS","statusCode":0,"successful":true}
+```
 # Step 1. Send gather data for analysis request (Saves information about current tables schema)
 ```bash
 $ curl -H "Content-Type: application/json" -X POST -d "[\"messages\",\"tableName2\"]" http://localhost:8088/api/v1/gatherDataForAnalysis

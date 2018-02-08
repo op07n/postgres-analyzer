@@ -1,9 +1,11 @@
 package com.hackaton.dao;
 
 import com.hackaton.data.ConnectionConfig;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
 
@@ -16,13 +18,19 @@ import java.util.logging.Logger;
 
 @Slf4j
 @Component
-public class DataSourceWrapper implements DataSource {
+public class JDBCService  {
 
     private DataSource dataSource;
 
+    @Getter
     private ConnectionConfig connectionConfig;
 
-    public DataSourceWrapper() {
+    @Getter
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public JDBCService(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.url("jdbc:postgresql://localhost:5433/someDB");
         dataSourceBuilder.username("postgres");
@@ -41,50 +49,6 @@ public class DataSourceWrapper implements DataSource {
         ds.setPassword(connectionConfig.getPassword());
 
         this.dataSource = ds;
-    }
-
-    @Override
-    public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
-    }
-
-    @Override
-    public Connection getConnection(String username, String password) throws SQLException {
-        return dataSource.getConnection(username, password);
-    }
-
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return dataSource.unwrap(iface);
-    }
-
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return dataSource.isWrapperFor(iface);
-    }
-
-    @Override
-    public PrintWriter getLogWriter() throws SQLException {
-        return dataSource.getLogWriter();
-    }
-
-    @Override
-    public void setLogWriter(PrintWriter out) throws SQLException {
-        dataSource.setLogWriter(out);
-    }
-
-    @Override
-    public void setLoginTimeout(int seconds) throws SQLException {
-        dataSource.setLoginTimeout(seconds);
-    }
-
-    @Override
-    public int getLoginTimeout() throws SQLException {
-        return dataSource.getLoginTimeout();
-    }
-
-    @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return dataSource.getParentLogger();
+        this.jdbcTemplate.setDataSource(dataSource);
     }
 }

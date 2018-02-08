@@ -1,6 +1,7 @@
 package com.hackaton.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +20,12 @@ public class RowDaoService {
     @Autowired
     EntityManager entityManager;
 
+    @Autowired
+    JDBCService jdbcService;
+
     @Transactional(readOnly = true)
     public boolean testConnection() {
-        Query query = entityManager.createNativeQuery("select 1;");
-        List<Object> result = query.getResultList();
-        if (result == null || result.isEmpty()) {
-            return false;
-        }
-        Integer value = (Integer) result.get(0);
+        int value = jdbcService.getJdbcTemplate().queryForObject("select 1;", Integer.class);
         return value == 1;
     }
 

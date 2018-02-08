@@ -1,9 +1,12 @@
 package com.hackaton.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,20 +18,15 @@ public class ColumnDaoService {
     @Autowired
     private ColumnDao columnDao;
 
+    @Autowired
+    private JDBCService jdbcService;
+
     @Transactional(readOnly = true)
     public Optional<List<String>> streamTables(String schemaName) {
-        List<Object> result = columnDao.listTables(schemaName);
-
-        if (result == null || result.isEmpty()) {
-            return Optional.empty();
-        }
-
-        List<String> tableNames = new ArrayList<>();
-        for (int i = 0; i < result.size(); i++) {
-            Object r = result.get(i);
-            String tableName = (String) r;
-            tableNames.add(tableName);
-        }
+        List<String> tableNames  = this.jdbcService.getJdbcTemplate().queryForList(
+                "SELECT tablename FROM pg_catalog.pg_tables where schemaname = ?",
+                new Object[] {schemaName},
+                String.class);
 
         if (tableNames.isEmpty()) {
             return Optional.empty();

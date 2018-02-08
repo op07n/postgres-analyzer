@@ -2,7 +2,7 @@ package com.hackaton.controllers;
 
 import com.hackaton.dao.ColumnDaoService;
 import com.hackaton.SchemaCompareService;
-import com.hackaton.dao.DataSourceWrapper;
+import com.hackaton.dao.JDBCService;
 import com.hackaton.dao.RowDaoService;
 import com.hackaton.dao.TableSchema;
 import com.hackaton.data.ConnectionConfig;
@@ -37,7 +37,7 @@ public class AnalyzerController {
     private SchemaCompareService schemaCompareService;
 
     @Autowired
-    private DataSourceWrapper dataSourceWrapper;
+    private JDBCService dataSourceWrapper;
 
 
     public AnalyzerController() {
