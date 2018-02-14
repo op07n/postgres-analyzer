@@ -37,7 +37,7 @@ public class RowDaoService {
                 List<Object> values = new ArrayList<>();
                 ResultSetMetaData metaData = resultSet.getMetaData();
 
-                for (int i = 0; i < columnsNum; i++) {
+                for (int i = 1; i <= columnsNum; i++) {
                    Object value = resultSet.getObject(i);
                    String type = metaData.getColumnTypeName(i).toUpperCase();
                    switch (type) {
