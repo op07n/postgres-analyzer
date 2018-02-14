@@ -2,7 +2,6 @@ package com.hackaton;
 
 
 import lombok.extern.slf4j.Slf4j;
-//import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +13,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.*;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
 import javax.sql.DataSource;
 
 @Slf4j
@@ -41,7 +43,7 @@ public class Application extends SpringBootServletInitializer {
     }*/
 
     public static void main( String[] args ) {
-        System.out.println("******* Postgres analyzer application started *******");
+        System.out.println("******* Postgres DPA analyzer application started *******");
         SpringApplication.run(Application.class, args);
     }
 

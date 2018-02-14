@@ -24,14 +24,7 @@ mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\applic
 ```bash
 mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src/main/resources/application.properties -Dlog4j.configuration=file:conf/log4j.properties
 ```
-## Get table names:
-```bash
-curl -H "Content-Type: application/json" -X GET  http://localhost:8088/api/v1/getTables?schema=public
-```
-# response
-```bash
-{"status":"SUCCESS","statusCode":0,"data":["schema_version","messages"],"successful":true}
-```
+
 # How to use Postgres DPA Analyzer
 # Step 0. Set db configuration, and check connection
 ```bash
@@ -48,6 +41,14 @@ curl -H "Content-Type: application/json" -X POST -d "{\"dbUrl\":\"jdbc:postgresq
 ```
 ```
 {"status":"SUCCESS","statusCode":0,"successful":true}
+```
+## (Optional Step) Get table names:
+```bash
+curl -H "Content-Type: application/json" -X GET  http://localhost:8088/api/v1/getTables?schema=public
+```
+# response
+```bash
+{"status":"SUCCESS","statusCode":0,"data":["schema_version","messages"],"successful":true}
 ```
 # Step 1. Send gather data for analysis request (Saves information about current tables schema)
 ```bash

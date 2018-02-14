@@ -16,9 +16,6 @@ import java.util.Optional;
 public class ColumnDaoService {
 
     @Autowired
-    private ColumnDao columnDao;
-
-    @Autowired
     private JDBCService jdbcService;
 
     @Transactional(readOnly = true)
@@ -37,21 +34,16 @@ public class ColumnDaoService {
 
     @Transactional(readOnly = true)
     public Optional<TableSchema> streamColumns(int version, String tableName) {
-        List<Object[]> result = columnDao.listColumns(tableName);
-
-        if (result == null || result.isEmpty()) {
-            return Optional.empty();
-        }
-
-        List<Column> columns = new ArrayList<>();
-        for (int i = 0; i < result.size(); i++) {
-            Object[] r = (Object[]) result.get(i);
-            String columnName = (String) r[0];
-            String dataType = (String) r[1];
-
-            Column column = new Column(columnName, dataType);
-            columns.add(column);
-        }
+        List<Column> columns = this.jdbcService.getJdbcTemplate()
+                .query("select column_name, data_type, character_maximum_length from INFORMATION_SCHEMA.COLUMNS where table_name = " + tableName, new RowMapper<Column>() {
+                    @Override
+                    public Column mapRow(ResultSet resultSet, int i) throws SQLException {
+                        String columnName = resultSet.getString(0);
+                        String dataType = resultSet.getString(1);
+                        Column column = new Column(columnName, dataType);
+                        return column;
+                    }
+                });
 
         if (columns.isEmpty()) {
             return Optional.empty();
