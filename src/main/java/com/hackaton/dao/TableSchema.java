@@ -23,6 +23,7 @@ public class TableSchema {
 
     public TableSchema(String tableName, List<Column> columns, List<Row> rows) {
         this.rows = rows;
+        this.columns = columns;
         this.tableName = tableName;
     }
 
