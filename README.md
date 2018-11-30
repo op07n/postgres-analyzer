@@ -1,4 +1,4 @@
-# postgres-dpa-analyzer
+# postgres-analyzer
 # Create postgres db 'analyzer'
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5433/analyzer
@@ -25,7 +25,7 @@ mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src\main\resources\applic
 mvn spring-boot:run -Dserver.port=8088 -Dinstance.conf=src/main/resources/application.properties -Dlog4j.configuration=file:conf/log4j.properties
 ```
 
-# How to use Postgres DPA Analyzer
+# How to use Postgres Analyzer
 # Step 0. Set db configuration, and check connection
 ```bash
 curl -H "Content-Type: application/json" -X POST -d "{\"dbUrl\":\"jdbc:postgresql://localhost:5432/messages\",\"username\":\"postgres\",\"password\":\"postgres\",\"schemaName\":\"public\"}" http://localhost:8088/api/v1/connectToDB
