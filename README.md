@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/cgdvr8jn4xi7ldc9?svg=true)](https://ci.appveyor.com/project/op07n/postgres-analyzer)
+
 # postgres-analyzer
 # Create postgres db 'analyzer'
 ```
