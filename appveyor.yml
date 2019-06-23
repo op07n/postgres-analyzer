@@ -32,3 +32,8 @@ test_script:
 cache:
   - C:\maven\
   - C:\Users\appveyor\.m2
+  
+
+artifacts:  # Archive the generated packages in the ci.appveyor.com build report.  - path: bin\Debug\*
+  - path: C:\Users\appveyor\.m2
+    name: artifacts-all  
